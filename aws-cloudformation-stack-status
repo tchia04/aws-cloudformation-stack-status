@@ -4,6 +4,31 @@
 #
 # See: https://github.com/alestic/aws-cloudformation-stack-status
 #
+function usage() {
+  cat <<USAGE
+Clean display of single most recent event status for each resource in a CloudFormation stack
+
+  For more details see https://github.com/alestic/aws-cloudformation-stack-status
+  Usage: $0 --region \$region --watch --stack-name \$stack
+
+Example#1
+  Monitor all stack resource progress live (Interrupt with Ctrl-C):
+  aws-cloudformation-stack-status --watch --region $region --stack-name $stack
+
+Example#2
+  The --stack-name is optional, and multiple stacks can be monitored together:
+  watch aws-cloudformation-stack-status --watch $webstack $dbstack $dnsstack
+
+Example#3
+  One time display of latest status for each stack resource:
+  aws-cloudformation-stack-status --region $region --stack-name $stack
+
+Requirements
+This script does require that you have already installed and configured the aws-cli.
+
+USAGE
+
+}
 region_opt=
 stack_names=
 watch=
@@ -12,8 +37,8 @@ while [ $# -gt 0 ]; do
     --region)     region_opt="--region $2";               shift 2 ;;
     --stack-name) stack_names="$stack_names $2";          shift 2 ;;
     --watch)      watch=1;                                shift ;;
-    --*)          echo "$0: Unrecognized option: $1" >&2; exit 1  ;;
-    *) break ;;
+		--*)          echo "$0: Unrecognized option: $1" >&2; usage; exit 1  ;;
+		*) usage; exit 1;;
   esac
 done
 set -- $stack_names $@
