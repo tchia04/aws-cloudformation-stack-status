@@ -37,8 +37,10 @@ while [ $# -gt 0 ]; do
     --region)     region_opt="--region $2";               shift 2 ;;
     --stack-name) stack_names="$stack_names $2";          shift 2 ;;
     --watch)      watch=1;                                shift ;;
+		help)					usage; exit 0;;
+		--help)				usage; exit 0;;
 		--*)          echo "$0: Unrecognized option: $1" >&2; usage; exit 1  ;;
-		*) usage; exit 1;;
+		*) break;;
   esac
 done
 set -- $stack_names $@
